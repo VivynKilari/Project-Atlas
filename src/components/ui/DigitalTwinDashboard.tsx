@@ -128,13 +128,14 @@ function AnalyticsPanel({ tick }: { tick: number }) {
   return (
     <div style={{
       position: 'absolute', top: '72px', right: '16px',
-      width: '260px', zIndex: 25,
+      width: '260px', zIndex: 30,
       background: 'rgba(8, 15, 32, 0.96)',
       border: '1px solid rgba(14,165,233,0.3)',
       borderRadius: '12px',
       backdropFilter: 'blur(20px)',
       boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
       overflow: 'hidden',
+      pointerEvents: 'auto',
     }}>
       {/* Header */}
       <div style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -189,12 +190,13 @@ function TrafficPanel({ tick }: { tick: number }) {
   return (
     <div style={{
       position: 'absolute', top: '72px', right: '16px',
-      width: '240px', zIndex: 25,
+      width: '240px', zIndex: 30,
       background: 'rgba(8, 15, 32, 0.96)',
       border: '1px solid rgba(14,165,233,0.3)',
       borderRadius: '12px',
       backdropFilter: 'blur(20px)',
       boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+      pointerEvents: 'auto',
     }}>
       <div style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: '8px' }}>
         <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#0EA5E9', boxShadow: '0 0 5px #0EA5E9', animation: 'dtPulse 1.8s infinite' }} />
@@ -249,12 +251,13 @@ function InventoryPanel({ tick }: { tick: number }) {
   return (
     <div style={{
       position: 'absolute', top: '72px', right: '16px',
-      width: '260px', zIndex: 25,
+      width: '260px', zIndex: 30,
       background: 'rgba(8, 15, 32, 0.96)',
       border: '1px solid rgba(14,165,233,0.3)',
       borderRadius: '12px',
       backdropFilter: 'blur(20px)',
       boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+      pointerEvents: 'auto',
     }}>
       <div style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: '8px' }}>
         <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#F59E0B', boxShadow: '0 0 5px #F59E0B', animation: 'dtPulse 2.2s infinite' }} />
@@ -290,7 +293,7 @@ function HeatmapLegend() {
   return (
     <div style={{
       position: 'absolute', top: '72px', right: '16px',
-      zIndex: 25,
+      zIndex: 30,
       background: 'rgba(8, 15, 32, 0.96)',
       border: '1px solid rgba(14,165,233,0.25)',
       borderRadius: '12px',
@@ -298,6 +301,7 @@ function HeatmapLegend() {
       padding: '12px 16px',
       boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
       minWidth: '200px',
+      pointerEvents: 'auto',
     }}>
       <div style={{ color: '#94A3B8', fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>Utilization Heatmap</div>
       {/* Color scale */}
@@ -462,7 +466,8 @@ export function DigitalTwinDashboard({ className, style }: { className?: string;
         <div style={{
           position: 'absolute', top: '140px', right: '16px',
           display: 'flex', flexDirection: 'column', gap: '5px',
-          zIndex: 20, minWidth: '210px',
+          zIndex: 30, minWidth: '210px',
+          pointerEvents: 'auto',
         }}>
           <div style={{
             background: 'rgba(8, 15, 32, 0.95)',
@@ -529,7 +534,8 @@ export function DigitalTwinDashboard({ className, style }: { className?: string;
       {/* ── BOTTOM LEFT: Zone Utilization ── */}
       <div style={{
         position: 'absolute', bottom: '52px', left: '16px',
-        zIndex: 20,
+        zIndex: 30,
+        pointerEvents: 'auto',
         background: 'rgba(8, 15, 32, 0.92)',
         border: '1px solid rgba(14,165,233,0.2)',
         borderRadius: '10px',
@@ -553,7 +559,8 @@ export function DigitalTwinDashboard({ className, style }: { className?: string;
       {/* ── BOTTOM CENTER: View Mode Tabs + Day/Night ── */}
       <div style={{
         position: 'absolute', bottom: '52px', left: '50%', transform: 'translateX(-50%)',
-        display: 'flex', alignItems: 'center', gap: '6px', zIndex: 20,
+        display: 'flex', alignItems: 'center', gap: '6px', zIndex: 30,
+        pointerEvents: 'auto',
       }}>
         {/* View Mode Tabs */}
         <div style={{
