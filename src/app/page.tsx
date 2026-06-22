@@ -6,7 +6,9 @@ import { CargoMenu } from '@/components/ui/cargo-menu'
 import { WarehouseLayoutPanel } from '@/components/ui/warehouse-layout'
 import { TourGuide, TourButton } from '@/components/ui/tour-guide'
 import { DigitalTwinDashboard } from '@/components/ui/DigitalTwinDashboard'
+import { BuildingDetailPanel } from '@/components/ui/BuildingDetailPanel'
 import { WarehouseInventoryProvider } from '@/lib/warehouse-inventory'
+import { ViewModeProvider } from '@/lib/contexts/view-mode-context'
 import { warehouses } from '@/lib/mock-data'
 
 const WarehouseScene = dynamic(
@@ -81,14 +83,21 @@ function LoadingFallback() {
 
 export default function Home() {
   const [showCargoMenu, setShowCargoMenu] = useState(false)
+  const [activeBuildingDetail, setActiveBuildingDetail] = useState<string | null>(null)
   const [activeWarehouseLayout, setActiveWarehouseLayout] = useState<string | null>(null)
   const [showTour, setShowTour] = useState(false)
   
   const activeWarehouse = activeWarehouseLayout 
     ? warehouses.find(w => w.id === activeWarehouseLayout) 
     : null
+
+  // When a warehouse is clicked in the 3D scene, open the detail panel first
+  const handleWarehouseClick = (warehouseId: string) => {
+    setActiveBuildingDetail(warehouseId)
+  }
   
   return (
+    <ViewModeProvider>
     <WarehouseInventoryProvider>
       <main className="relative w-full h-screen overflow-hidden">
         <header style={{
@@ -196,7 +205,7 @@ export default function Home() {
 
         <Suspense fallback={<LoadingFallback />}>
           <div className="canvas-container">
-            <WarehouseScene onOpenWarehouseLayout={setActiveWarehouseLayout} />
+            <WarehouseScene onOpenWarehouseLayout={handleWarehouseClick} />
           </div>
         </Suspense>
 
@@ -211,6 +220,18 @@ export default function Home() {
         </div>
         
         <CargoMenu isOpen={showCargoMenu} onClose={() => setShowCargoMenu(false)} />
+
+        {/* Building Detail Panel — opens first on warehouse click */}
+        {activeBuildingDetail && !activeWarehouseLayout && (
+          <BuildingDetailPanel
+            warehouseId={activeBuildingDetail}
+            onClose={() => setActiveBuildingDetail(null)}
+            onOpenLayout={() => {
+              setActiveWarehouseLayout(activeBuildingDetail)
+              setActiveBuildingDetail(null)
+            }}
+          />
+        )}
         
         {activeWarehouse && (
           <WarehouseLayoutPanel 
@@ -222,5 +243,6 @@ export default function Home() {
         <TourGuide isOpen={showTour} onClose={() => setShowTour(false)} />
       </main>
     </WarehouseInventoryProvider>
+    </ViewModeProvider>
   )
 }

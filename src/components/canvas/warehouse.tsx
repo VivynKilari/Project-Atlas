@@ -640,24 +640,53 @@ export function Warehouse({ position, warehouseId }: { position: [number, number
       ))}
 
       {/* === ROOFTOP EQUIPMENT === */}
-      {/* HVAC units */}
-      {[-5, 5].map((x, i) => (
-        <group key={`hvac-${i}`} position={[x, height + 0.6, 0]}>
-          <mesh>
-            <boxGeometry args={[3, 1.2, 2]} />
-            <meshStandardMaterial color="#9CA3AF" metalness={0.5} roughness={0.5} />
+      {/* HVAC units — larger, more detailed */}
+      {[-6, 0, 6].map((x, i) => (
+        <group key={`hvac-${i}`} position={[x, height + 0.6, -3]}>
+          <mesh castShadow>
+            <boxGeometry args={[2.8, 1.2, 1.8]} />
+            <meshStandardMaterial color="#8A9BA8" metalness={0.5} roughness={0.5} />
           </mesh>
           <mesh position={[0, 0.7, 0]}>
-            <cylinderGeometry args={[0.6, 0.6, 0.3, 12]} />
+            <cylinderGeometry args={[0.55, 0.55, 0.32, 12]} />
             <meshStandardMaterial color="#6B7280" metalness={0.6} roughness={0.4} />
           </mesh>
-          {/* Fan grill */}
-          <mesh position={[0, 0.86, 0]}>
-            <cylinderGeometry args={[0.55, 0.55, 0.05, 12]} />
+          <mesh position={[0, 0.87, 0]}>
+            <cylinderGeometry args={[0.5, 0.5, 0.06, 12]} />
             <meshStandardMaterial color="#374151" metalness={0.7} roughness={0.3} />
+          </mesh>
+          {/* Intake duct */}
+          <mesh position={[1.5, 0.3, 0]}>
+            <boxGeometry args={[0.5, 0.6, 1.4]} />
+            <meshStandardMaterial color="#6B7280" metalness={0.5} roughness={0.6} />
           </mesh>
         </group>
       ))}
+      {/* Ventilation exhaust stacks */}
+      {[-7, -3, 3, 7].map((x, i) => (
+        <group key={`vent-${i}`} position={[x, height + 0.35, 8]}>
+          <mesh>
+            <cylinderGeometry args={[0.2, 0.25, 0.7, 8]} />
+            <meshStandardMaterial color="#9CA3AF" metalness={0.6} roughness={0.4} />
+          </mesh>
+          <mesh position={[0, 0.45, 0]}>
+            <cylinderGeometry args={[0.3, 0.3, 0.1, 8]} />
+            <meshStandardMaterial color="#6B7280" metalness={0.5} roughness={0.5} />
+          </mesh>
+        </group>
+      ))}
+      {/* Rooftop skylights */}
+      {[-6, 0, 6].map((x, i) => (
+        <mesh key={`skylight-${i}`} position={[x, height + 0.22, 10]}>
+          <boxGeometry args={[2.5, 0.12, 1.2]} />
+          <meshPhysicalMaterial color="#FFFFFF" transparent opacity={0.35} transmission={0.6} roughness={0.1} />
+        </mesh>
+      ))}
+      {/* Solar panel array hint */}
+      <mesh position={[0, height + 0.2, -10]}>
+        <boxGeometry args={[14, 0.08, 4]} />
+        <meshStandardMaterial color="#1E3A5F" metalness={0.6} roughness={0.3} />
+      </mesh>
       {/* Antenna/sensor mast */}
       <mesh position={[0, height + 1.4, 0]}>
         <cylinderGeometry args={[0.04, 0.06, 1.8, 6]} />
@@ -666,6 +695,11 @@ export function Warehouse({ position, warehouseId }: { position: [number, number
       <mesh position={[0, height + 2.4, 0]}>
         <boxGeometry args={[0.6, 0.06, 0.06]} />
         <meshStandardMaterial color={ELECTRIC_BLUE} emissive={ELECTRIC_BLUE} emissiveIntensity={0.8} metalness={0.8} />
+      </mesh>
+      {/* Emergency beacon */}
+      <mesh position={[0, height + 2.35, 0]}>
+        <sphereGeometry args={[0.1, 8, 8]} />
+        <meshStandardMaterial color="#EF4444" emissive="#EF4444" emissiveIntensity={3} />
       </mesh>
 
       {/* === STATUS INDICATOR LIGHT === */}
@@ -696,34 +730,48 @@ export function Warehouse({ position, warehouseId }: { position: [number, number
       </mesh>
 
       {/* === FLOATING BUILDING LABEL === */}
-      <Html position={[0, height + 3.2, 0]} center distanceFactor={60} occlude={false}>
+      <Html position={[0, height + 3.8, 0]} center distanceFactor={55} occlude={false}>
         <div style={{
-          background: 'rgba(15,36,71,0.92)',
-          border: '1px solid rgba(14,165,233,0.6)',
-          borderRadius: '8px',
-          padding: '6px 14px',
+          background: 'rgba(8,15,32,0.96)',
+          border: '1px solid rgba(14,165,233,0.55)',
+          borderRadius: '10px',
+          padding: '7px 16px',
           color: 'white',
           fontSize: '13px',
           fontWeight: 700,
           letterSpacing: '0.08em',
           whiteSpace: 'nowrap',
-          boxShadow: '0 0 16px rgba(14,165,233,0.3)',
+          boxShadow: '0 0 20px rgba(14,165,233,0.3), inset 0 1px 0 rgba(255,255,255,0.06)',
           pointerEvents: 'none',
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
-          gap: '8px',
+          gap: '4px',
+          backdropFilter: 'blur(10px)',
         }}>
-          <span style={{ 
-            display: 'inline-block', 
-            width: '8px', 
-            height: '8px', 
-            borderRadius: '50%', 
-            background: STATUS_GREEN,
-            boxShadow: `0 0 6px ${STATUS_GREEN}`,
-            flexShrink: 0,
-          }} />
-          {warehouseLabel}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ 
+              display: 'inline-block', 
+              width: '7px', 
+              height: '7px', 
+              borderRadius: '50%', 
+              background: STATUS_GREEN,
+              boxShadow: `0 0 6px ${STATUS_GREEN}`,
+              flexShrink: 0,
+              animation: 'labelPulse 2s infinite',
+            }} />
+            {warehouseLabel}
+          </div>
+          <div style={{ display: 'flex', gap: '8px', fontSize: '10px', color: 'rgba(148,163,184,0.9)', fontWeight: 500 }}>
+            <span style={{ background: 'rgba(14,165,233,0.1)', padding: '1px 6px', borderRadius: '4px', border: '1px solid rgba(14,165,233,0.2)' }}>
+              {warehouseId === 'warehouse-1' ? '74% Cap' : '85% Cap'}
+            </span>
+            <span style={{ background: 'rgba(16,185,129,0.1)', padding: '1px 6px', borderRadius: '4px', border: '1px solid rgba(16,185,129,0.2)', color: STATUS_GREEN }}>
+              ONLINE
+            </span>
+          </div>
         </div>
+        <style>{`@keyframes labelPulse { 0%,100%{opacity:1} 50%{opacity:0.4} }`}</style>
       </Html>
       
       {/* Interior racking with inventory packages */}
@@ -809,15 +857,27 @@ export function Warehouse({ position, warehouseId }: { position: [number, number
       
       {/* Hover tooltip */}
       {isHovered && (
-        <Html position={[0, height + 2, 0]} center distanceFactor={50}>
-          <div className="bg-ana-blue text-white px-3 py-1.5 rounded-lg shadow-lg whitespace-nowrap text-sm font-medium pointer-events-none">
-            <span className="flex items-center gap-1.5">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
-              Click to view layout
-            </span>
+        <Html position={[0, height - 1, depth / 2 + 1]} center distanceFactor={45}>
+          <div style={{
+            background: 'rgba(8,15,32,0.96)',
+            border: '1px solid rgba(14,165,233,0.5)',
+            borderRadius: '8px',
+            padding: '8px 14px',
+            color: '#F1F5F9',
+            fontSize: '12px',
+            fontWeight: 600,
+            whiteSpace: 'nowrap',
+            pointerEvents: 'none',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
+            backdropFilter: 'blur(10px)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+          }}>
+            <svg width="13" height="13" fill="none" stroke="#38BDF8" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            Click to view inventory layout
           </div>
         </Html>
       )}
