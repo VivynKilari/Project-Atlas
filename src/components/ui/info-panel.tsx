@@ -715,34 +715,49 @@ export function InfoPanel({
   }
 
   return (
-    <div className="absolute right-4 top-20 z-20 w-80 bg-white rounded-xl shadow-2xl border border-ana-soft-gray overflow-hidden animate-in slide-in-from-right-5 duration-300">
-      <div className="bg-ana-blue px-4 py-3 flex justify-between items-center">
+    <div
+      className="absolute z-20 w-80 rounded-xl shadow-2xl overflow-hidden"
+      style={{
+        /* Left side: clears zone utilization panel at bottom-left */
+        left: '16px',
+        top: '80px',
+        maxHeight: 'calc(100vh - 120px)',
+        overflowY: 'auto',
+        background: 'rgba(8, 15, 32, 0.97)',
+        border: '1px solid rgba(14,165,233,0.3)',
+        backdropFilter: 'blur(20px)',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
+      }}
+    >
+      {/* Header */}
+      <div style={{ background: 'linear-gradient(135deg, #0F2447, #1E3A8A)', padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <p className="text-white/70 text-xs uppercase tracking-wide">{titles[selected.type]}</p>
-          <h3 className="text-white font-semibold">{getTitle()}</h3>
+          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{titles[selected.type]}</p>
+          <h3 style={{ color: '#F1F5F9', fontWeight: 700, fontSize: '14px', marginTop: '1px' }}>{getTitle()}</h3>
         </div>
-        <button 
+        <button
           onClick={onClose}
-          className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+          style={{ width: '28px', height: '28px', borderRadius: '6px', background: 'rgba(255,255,255,0.1)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.15s' }}
+          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.2)')}
+          onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
         >
-          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          <svg width="14" height="14" fill="none" stroke="#94A3B8" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
-      
-      <div className="p-4">
+
+      {/* Content — themed to dark */}
+      <div className="p-4" style={{ color: '#CBD5E1' }}>
         {selected.type === 'warehouse' && <WarehousePanel data={selected.data as Warehouse} />}
         {selected.type === 'truck' && <TruckPanel data={selected.data as Truck} />}
         {selected.type === 'cargo' && <CargoPanel data={selected.data as CargoItem} />}
         {selected.type === 'shelf' && <ShelfPanel data={selected.data as Shelf} />}
         {selected.type === 'uld' && <ULDPanel data={selected.data as ULDData} />}
       </div>
-      
-      <div className="bg-ana-gray/50 px-4 py-2 border-t border-ana-soft-gray">
-        <p className="text-xs text-ana-dark/50 text-center">
-          Click elsewhere to close • ESC to dismiss
-        </p>
+
+      <div style={{ padding: '8px 16px', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.2)' }}>
+        <p style={{ color: '#334155', fontSize: '10px', textAlign: 'center' }}>Click elsewhere to close</p>
       </div>
     </div>
   )
